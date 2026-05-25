@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>BUCKLER DIGITAL — Материалы для кузовного ремонта на маркетплейсах</title>
+<meta name="description" content="Buckler Digital — линейка лакокрасочных материалов для кузовного ремонта на OZON и Яндекс Маркет. Сделано в Беларуси. Создано для России." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07060a;
+    --bg-1: #0d0c12;
+    --bg-2: #14121a;
+    --line: rgba(255,255,255,0.07);
+    --line-2: rgba(255,255,255,0.14);
+    --text: #f3f3f0;
+    --muted: rgba(243,243,240,0.55);
+    --dim: rgba(243,243,240,0.32);
+    --gold: #f0c000;
+    --gold-hot: #ffd640;
+    --gold-glow: rgba(255,214,64,0.55);
+    --red: #cc2200;
+    --red-hot: #ff2a08;
+    --blue: #4070ff;
+    --purple: #9a40ff;
+    --font-d: 'Syne', sans-serif;
+    --font-b: 'DM Sans', sans-serif;
+    --font-m: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; background: var(--bg); }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-b);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: none;
+  }
+  ::selection { background: var(--gold); color: #000; }
+
+  /* OVERLAYS */
+  .grid-overlay {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 1;
+    background-image:
+      linear-gradient(rgba(240,192,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,192,0,0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 90%);
+  }
+  #particles {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 2;
+    opacity: 0.7;
+  }
+  .scanlines {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 997;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(255,255,255,0.022) 3px,
+      transparent 4px
+    );
+    mix-blend-mode: overlay;
+  }
+  .noise {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 998;
+    opacity: 0.05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .vignette {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 996;
+    background: radial-gradient(ellipse 100% 80% at 50% 50%, transparent 50%, rgba(0,0,0,0.55) 100%);
+  }
+
+  /* TOP BAR */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 3px; z-index: 9999;
+    background: rgba(255,255,255,0.04);
+  }
+  .topbar-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-hot) 50%, var(--gold));
+    box-shadow: 0 0 18px var(--gold-glow), 0 0 2px #fff inset;
+    transition: width 0.08s linear;
+  }
+  .topbar-tick {
+    position: absolute; top: 100%; right: 0;
+    padding: 6px 12px;
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 1.5px;
+    color: var(--gold-hot);
+    background: rgba(7,6,10,0.85);
+    border-left: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    text-transform: uppercase;
+  }
+  .topbar-tick::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--gold-hot);
+    margin-right: 8px;
+    transform: translateY(-1px);
+    box-shadow: 0 0 8px var(--gold-hot);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  /* CUSTOM CURSOR */
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 10000;
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+    will-change: transform;
+  }
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--gold-hot);
+    box-shadow: 0 0 10px var(--gold-hot);
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(255,255,255,0.35);
+    transition: width 0.25s, height 0.25s, border-color 0.2s, background 0.2s;
+  }
+  .cursor-ring.hover {
+    width: 64px; height: 64px;
+    border-color: var(--gold-hot);
+    background: rgba(255,214,64,0.06);
+  }
+
+  /* NAV */
+  nav.main {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 22px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.3s, padding 0.3s, border-color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.main.scrolled {
+    background: rgba(7,6,10,0.78);
+    backdrop-filter: blur(18px) saturate(140%);
+    padding: 14px 56px;
+    border-bottom-color: var(--line);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none; color: var(--text);
+  }
+  .nav-logo img { height: 32px; width: auto; }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1; }
+  .nav-logo-name {
+    font-family: var(--font-d);
+    font-size: 16px; font-weight: 800;
+    letter-spacing: 2px;
+  }
+  .nav-logo-sub {
+    font-family: var(--font-m);
+    font-size: 9px; font-weight: 500;
+    color: var(--gold-hot);
+    letter-spacing: 3px;
+    margin-top: 3px;
+  }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -6px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold-hot);
+    transition: width 0.25s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    padding: 11px 18px;
+    border: 1px solid var(--line-2);
+    background: transparent;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateY(101%);
+    transition: transform 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+    z-index: -1;
+  }
+  .nav-cta:hover { border-color: var(--gold); color: #000; }
+  .nav-cta:hover::before { transform: translateY(0); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 120px 56px 56px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* gold light bar on the right */
+  .hero-goldbar {
+    position: absolute;
+    right: 0; top: 50%; transform: translateY(-50%);
+    width: 4px; height: 50vh;
+    background: linear-gradient(to bottom, transparent, var(--gold-hot) 20%, var(--gold-hot) 80%, transparent);
+    box-shadow: 0 0 22px var(--gold-glow);
+    opacity: 0;
+    animation: goldbar-in 1.2s cubic-bezier(0.7,0,0.3,1) 0.4s forwards;
+  }
+  @keyframes goldbar-in {
+    0% { height: 0; opacity: 0; }
+    100% { height: 50vh; opacity: 1; }
+  }
+
+  /* corner brackets */
+  .hero-brackets > span {
+    position: absolute;
+    width: 28px; height: 28px;
+    border: 2px solid var(--gold-hot);
+    opacity: 0;
+    animation: bracket-in 0.6s ease-out 1.6s forwards;
+  }
+  .hero-brackets > span:nth-child(1) { top: 100px; left: 56px; border-right: none; border-bottom: none; }
+  .hero-brackets > span:nth-child(2) { top: 100px; right: 56px; border-left: none; border-bottom: none; }
+  .hero-brackets > span:nth-child(3) { bottom: 56px; left: 56px; border-right: none; border-top: none; }
+  .hero-brackets > span:nth-child(4) { bottom: 56px; right: 56px; border-left: none; border-top: none; }
+  @keyframes bracket-in {
+    0% { opacity: 0; transform: scale(0.4); }
+    100% { opacity: 0.85; transform: scale(1); }
+  }
+
+  .hero-meta {
+    position: absolute;
+    top: 100px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fade-in 0.8s ease-out 1.8s forwards;
+  }
+  .hero-meta .dot { width: 4px; height: 4px; background: var(--gold-hot); border-radius: 50%; box-shadow: 0 0 6px var(--gold-hot); }
+  @keyframes fade-in { to { opacity: 1; } }
+
+  /* HERO inner — 2 column for visual interest */
+  .hero-inner {
+    position: relative; z-index: 4;
+    max-width: 1320px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .hero-left {
+    position: relative;
+  }
+  .hero-label {
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-hot);
+    margin-bottom: 32px;
+    display: inline-flex; align-items: center; gap: 14px;
+    opacity: 0;
+    animation: fade-in 0.8s ease-out 0.3s forwards;
+  }
+  .hero-label::before {
+    content: '';
+    width: 48px; height: 1px;
+    background: var(--gold-hot);
+    box-shadow: 0 0 8px var(--gold-hot);
+  }
+  .hero-label::after {
+    content: '';
+    width: 6px; height: 6px; background: var(--gold-hot);
+    box-shadow: 0 0 8px var(--gold-hot);
+  }
+
+  .hero-h1 {
+    font-family: var(--font-d);
+    font-weight: 800;
+    font-size: clamp(56px, 8vw, 128px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    color: #fff;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .hero-h1 .word {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 0.92;
+    vertical-align: top;
+  }
+  .hero-h1 .word > span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: word-in 1.1s cubic-bezier(0.7,0,0.2,1) forwards;
+  }
+  .hero-h1 .word.d1 > span { animation-delay: 0.1s; }
+  .hero-h1 .word.d2 > span { animation-delay: 0.4s; }
+  .hero-h1 .word.d3 > span { animation-delay: 0.7s; }
+  .hero-h1 .word.d4 > span { animation-delay: 1.0s; }
+  @keyframes word-in { to { transform: translateY(0); } }
+  .hero-h1 .gold {
+    color: var(--gold-hot);
+    text-shadow: 0 0 32px rgba(255,214,64,0.4);
+  }
+  .hero-h1 .blue {
+    color: #fff;
+    background: linear-gradient(90deg, #fff 0%, #ffe88a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-desc {
+    font-size: 17px; color: var(--muted);
+    line-height: 1.7; max-width: 540px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fade-in 0.8s ease-out 1.4s forwards;
+  }
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+
+  .hero-row {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fade-in 0.8s ease-out 1.6s forwards;
+  }
+
+  /* CTA */
+  .cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 22px 32px;
+    background: var(--gold);
+    color: #000;
+    font-family: var(--font-d);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.3s, gap 0.25s;
+    box-shadow: 0 4px 28px rgba(255,214,64,0.0);
+  }
+  .cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%);
+    transform: translateX(-120%);
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cta:hover { background: var(--gold-hot); gap: 22px; box-shadow: 0 12px 40px rgba(255,214,64,0.45), 0 0 0 6px rgba(255,214,64,0.08); transform: translateY(-2px); }
+  .cta:hover::before { transform: translateX(120%); }
+  .cta .arrow { transition: transform 0.25s; }
+  .cta:hover .arrow { transform: translateX(4px); }
+
+  .cta-ghost {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 22px 28px;
+    color: var(--text);
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--line-2);
+    transition: border-color 0.2s, color 0.2s, gap 0.25s;
+  }
+  .cta-ghost:hover { border-color: var(--gold-hot); color: var(--gold-hot); gap: 18px; }
+
+  /* MARKETPLACE BADGES */
+  .marketplaces {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    opacity: 0;
+    animation: fade-in 0.8s ease-out 1.9s forwards;
+  }
+  .mp {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 22px;
+    border: 1px solid var(--line-2);
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.25s;
+    font-family: var(--font-m);
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .mp .mp-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .mp.ozon .mp-dot { background: #005bff; box-shadow: 0 0 0 0 rgba(0,91,255,0.4); animation: glow-blue 2.2s infinite; }
+  .mp.yandex .mp-dot { background: #fc3f1d; box-shadow: 0 0 0 0 rgba(252,63,29,0.4); animation: glow-red 2.2s infinite; }
+  @keyframes glow-blue { 0%,100% { box-shadow: 0 0 0 0 rgba(0,91,255,0.4); } 50% { box-shadow: 0 0 12px 4px rgba(0,91,255,0.5); } }
+  @keyframes glow-red  { 0%,100% { box-shadow: 0 0 0 0 rgba(252,63,29,0.4); } 50% { box-shadow: 0 0 12px 4px rgba(252,63,29,0.5); } }
+
+  .mp .mp-name { color: var(--text); }
+  .mp .mp-sub { font-size: 10px; color: var(--dim); letter-spacing: 1.5px; }
+  .mp:hover { border-color: var(--gold-hot); transform: translateY(-2px); }
+  .mp:hover .mp-name { color: var(--gold-hot); }
+
+  /* HERO RIGHT — logo particle system */
+  .hero-right {
+    position: relative;
+    aspect-ratio: 5 / 6;
+    max-width: 1100px;
+    width: 100%;
+    margin-left: auto;
+    margin-top: -120px;
+    margin-right: 80px;
+    opacity: 0;
+    animation: fade-in 1.2s ease-out 0.8s forwards;
+  }
+  .orb-wrap {
+    position: relative;
+    width: 100%; height: 100%;
+  }
+  .logo-canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
+  /* HUD corners */
+  .hud-corners > span {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 1px solid rgba(255,214,64,0.5);
+    z-index: 3;
+  }
+  .hud-corners > span:nth-child(1) { top: 6%;    left: 6%;    border-right: none; border-bottom: none; }
+  .hud-corners > span:nth-child(2) { top: 6%;    right: 6%;   border-left: none;  border-bottom: none; }
+  .hud-corners > span:nth-child(3) { bottom: 6%; left: 6%;    border-right: none; border-top: none; }
+  .hud-corners > span:nth-child(4) { bottom: 6%; right: 6%;   border-left: none;  border-top: none; }
+  .phase-tag {
+    position: absolute;
+    top: 6%; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-m);
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold-hot);
+    padding: 5px 10px;
+    background: rgba(7,6,10,0.85);
+    border: 1px solid rgba(240,192,0,0.4);
+    z-index: 3;
+    transition: color 0.3s, border-color 0.3s;
+    white-space: nowrap;
+  }
+  @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+  /* orbit chip labels */
+  .orb-chip {
+    position: absolute;
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 10px;
+    background: rgba(7,6,10,0.85);
+    border: 1px solid var(--line-2);
+    color: var(--text);
+    text-decoration: none;
+    z-index: 4;
+  }
+  .orb-chip-1 { top: 8%; right: 0; color: var(--gold-hot); border-color: rgba(240,192,0,0.4); }
+  .orb-chip-2 { bottom: 14%; left: -8%; color: var(--blue); border-color: rgba(64,112,255,0.4); }
+  .orb-chip-3 { bottom: 0; right: 10%; color: var(--purple); border-color: rgba(154,64,255,0.4); }
+  .orb-chip-4 { top: 30%; left: -12%; color: var(--text); }
+
+  /* big OZON CTA inside the particle field */
+  .orb-ozon {
+    position: absolute;
+    bottom: 14%; left: 4%;
+    z-index: 5;
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 22px 34px;
+    background: #005bff;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-d);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    border: 2px solid #005bff;
+    box-shadow: 0 12px 40px rgba(0, 91, 255, 0.45), 0 0 0 0 rgba(0, 91, 255, 0.5);
+    transition: transform 0.25s, box-shadow 0.3s, gap 0.25s;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .orb-ozon::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.35) 50%, transparent 75%);
+    transform: translateX(-130%);
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    z-index: -1;
+  }
+  .orb-ozon:hover {
+    background: #1e6fff;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 18px 56px rgba(30, 111, 255, 0.6), 0 0 0 8px rgba(0,91,255,0.12);
+    gap: 22px;
+  }
+  .orb-ozon:hover::before { transform: translateX(130%); }
+  .orb-ozon-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 12px #fff;
+    animation: pulse 1.8s infinite;
+  }
+  .orb-ozon-arrow {
+    font-size: 26px;
+    transition: transform 0.25s;
+  }
+  .orb-ozon:hover .orb-ozon-arrow { transform: translateX(4px); }
+  .orb-ozon-label {
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .orb-ozon-name {
+    font-family: var(--font-d);
+    font-size: 28px; font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: block;
+  }
+
+  /* =========================================
+     MARQUEE
+     ========================================= */
+  .marquee {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, transparent, rgba(240,192,0,0.04), transparent);
+    padding: 22px 0;
+  }
+  .marquee-track {
+    display: flex; gap: 56px;
+    white-space: nowrap;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+  }
+  .marquee span {
+    font-family: var(--font-d);
+    font-size: 32px; font-weight: 800;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.06);
+    display: inline-flex; align-items: center; gap: 56px;
+    text-transform: uppercase;
+  }
+  .marquee span::after {
+    content: '✦';
+    color: var(--gold-hot);
+    font-size: 24px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* =========================================
+     SECTION GENERIC
+     ========================================= */
+  .section {
+    position: relative;
+    padding: 140px 56px;
+    z-index: 4;
+  }
+  .section-num {
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--gold-hot);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .section-num::before {
+    content: ''; width: 36px; height: 1px;
+    background: var(--gold-hot);
+    box-shadow: 0 0 6px var(--gold-hot);
+  }
+  .section-title {
+    font-family: var(--font-d);
+    font-weight: 800;
+    font-size: clamp(40px, 5.2vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin-bottom: 56px;
+  }
+  .section-title em { font-style: normal; color: var(--gold-hot); text-shadow: 0 0 28px rgba(255,214,64,0.35); }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.2,0.7,0.2,1), transform 0.9s cubic-bezier(0.2,0.7,0.2,1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-stagger > * {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.2,0.7,0.2,1), transform 0.9s cubic-bezier(0.2,0.7,0.2,1);
+    transition-delay: calc(var(--i, 0) * 100ms);
+  }
+  .reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
+  .clip-reveal {
+    overflow: hidden;
+    display: inline-block;
+  }
+  .clip-reveal > span {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 1.1s cubic-bezier(0.7,0,0.2,1);
+  }
+  .clip-reveal.in > span { transform: translateY(0); }
+
+  /* =========================================
+     PRODUCTS
+     ========================================= */
+  .products-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 40px; flex-wrap: wrap;
+    max-width: 1320px; margin: 0 auto 64px;
+  }
+  .products-head-side {
+    max-width: 380px;
+  }
+  .products-head-side p {
+    font-size: 14px; color: var(--muted); line-height: 1.7;
+  }
+  .products-head-side .meta {
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 2.5px;
+    color: var(--dim); text-transform: uppercase;
+    margin-top: 18px;
+  }
+
+  .product-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .product-card {
+    position: relative;
+    background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line);
+    padding: 32px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .product-card:hover {
+    border-color: rgba(240,192,0,0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+  }
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle 320px at var(--mx, 50%) var(--my, 50%),
+      rgba(255,214,64,0.16),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .product-card:hover::before { opacity: 1; }
+  .product-card::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.7,0,0.3,1);
+  }
+  .product-card:hover::after { transform: scaleX(1); }
+
+  .product-img-wrap {
+    position: relative;
+    height: 320px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-img-wrap::before {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 30px; transform: translateX(-50%);
+    width: 70%; height: 18px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.8), transparent 70%);
+    filter: blur(10px);
+  }
+  .product-img-wrap::after {
+    content: '';
+    position: absolute;
+    left: 50%; bottom: 26px; transform: translateX(-50%);
+    width: 60%; height: 22px;
+    background: radial-gradient(ellipse, var(--gold-glow), transparent 70%);
+    filter: blur(16px);
+    opacity: 0.4;
+    transition: opacity 0.4s;
+  }
+  .product-card:hover .product-img-wrap::after { opacity: 1; }
+  .product-img-wrap img {
+    max-width: 92%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 32px rgba(0,0,0,0.7));
+    transition: transform 0.6s cubic-bezier(0.2,0.7,0.2,1);
+    will-change: transform;
+    position: relative; z-index: 2;
+  }
+  .product-card:hover .product-img-wrap img {
+    transform: translateY(-10px) scale(1.06) rotate(-2deg);
+  }
+
+  .product-body { position: relative; z-index: 2; }
+  .product-badge {
+    display: inline-block;
+    font-family: var(--font-m);
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 2px;
+    background: rgba(255,214,64,0.12);
+    color: var(--gold-hot);
+    border: 1px solid rgba(240,192,0,0.3);
+    padding: 4px 10px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .product-sku {
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 2.5px;
+    color: var(--dim);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .product-name {
+    font-family: var(--font-d);
+    font-size: 26px; font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .product-sub {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .product-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 24px;
+  }
+  .ptag {
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    padding: 5px 10px;
+    letter-spacing: 0.5px;
+  }
+  .ptag.gold {
+    color: var(--gold-hot);
+    background: rgba(240,192,0,0.08);
+    border-color: rgba(240,192,0,0.3);
+  }
+  .product-shops {
+    display: flex; gap: 8px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .pshop {
+    flex: 1;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-m);
+    font-size: 11px; font-weight: 600;
+    padding: 10px 12px;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    transition: all 0.2s;
+  }
+  .pshop .pshop-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pshop.ozon .pshop-dot { background: #005bff; box-shadow: 0 0 8px rgba(0,91,255,0.6); }
+  .pshop.yandex .pshop-dot { background: #fc3f1d; box-shadow: 0 0 8px rgba(252,63,29,0.6); }
+  .pshop:hover { background: rgba(255,255,255,0.08); border-color: var(--text); }
+
+  /* =========================================
+     ABOUT / WHY
+     ========================================= */
+  .about {
+    position: relative;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-1) 50%, var(--bg) 100%);
+    overflow: hidden;
+  }
+  .about-grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: center;
+  }
+  .about-text p {
+    font-size: 16px; color: var(--muted);
+    line-height: 1.75; margin-bottom: 22px;
+  }
+  .about-text strong { color: #fff; font-weight: 500; }
+  .about-quote {
+    margin-top: 36px;
+    padding-left: 24px;
+    border-left: 2px solid var(--gold-hot);
+    font-family: var(--font-d);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .about-quote em { font-style: normal; color: var(--gold-hot); }
+
+  /* FLAGS COUNTRIES */
+  .countries {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .country {
+    padding: 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 16px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .country:hover { border-color: var(--gold-hot); background: rgba(255,214,64,0.03); }
+  .country-flag {
+    width: 44px; height: 30px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .country-flag span { flex: 1; }
+  .country.by .country-flag span:nth-child(1) { background: #c8313e; }
+  .country.by .country-flag span:nth-child(2) { background: #4aa657; flex: 0.55; }
+  .country.ru .country-flag span:nth-child(1) { background: #fff; }
+  .country.ru .country-flag span:nth-child(2) { background: #0036a6; }
+  .country.ru .country-flag span:nth-child(3) { background: #d52b1e; }
+  .country-label {
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--dim); text-transform: uppercase;
+  }
+  .country-name {
+    font-family: var(--font-d);
+    font-size: 22px; font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .country-sub {
+    font-size: 13px; color: var(--muted);
+  }
+
+  /* RIGHT SIDE — animated visual */
+  .about-vis {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .about-shield {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-shield img {
+    width: 60%;
+    filter: drop-shadow(0 0 80px rgba(255,214,64,0.4));
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+  .about-ring {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 1px dashed;
+    animation: spin 30s linear infinite;
+  }
+  .about-ring::before {
+    content: '';
+    position: absolute;
+    top: -6px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .about-ring.r1 { inset: 6%; border-color: rgba(240,192,0,0.25); }
+  .about-ring.r1::before { background: var(--gold-hot); box-shadow: 0 0 14px var(--gold-hot); }
+  .about-ring.r2 { inset: 18%; border-color: rgba(64,112,255,0.22); animation-duration: 22s; animation-direction: reverse; }
+  .about-ring.r2::before { background: var(--blue); box-shadow: 0 0 14px var(--blue); }
+  .about-ring.r3 { inset: 30%; border-color: rgba(154,64,255,0.22); animation-duration: 36s; }
+  .about-ring.r3::before { background: var(--purple); box-shadow: 0 0 14px var(--purple); }
+
+  /* feature row */
+  .features {
+    max-width: 1320px;
+    margin: 96px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .feature {
+    background: var(--bg);
+    padding: 32px 28px;
+    transition: background 0.3s;
+  }
+  .feature:hover { background: var(--bg-2); }
+  .feature-num {
+    font-family: var(--font-m);
+    font-size: 10px; font-weight: 500;
+    color: var(--gold-hot);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .feature-h {
+    font-family: var(--font-d);
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .feature p {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+  }
+
+  /* =========================================
+     SHOPS — big marketplace section
+     ========================================= */
+  .shops-section {
+    padding: 140px 56px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    background:
+      radial-gradient(ellipse 50% 60% at 50% 40%, rgba(240,192,0,0.04), transparent 70%),
+      var(--bg);
+  }
+  .shops-grid {
+    max-width: 1320px;
+    margin: 56px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .shop-card {
+    position: relative;
+    padding: 56px 40px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    background: var(--bg-1);
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: none;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .shop-card:hover { transform: translateY(-4px); }
+  .shop-card.ozon { border-left: 4px solid #005bff; }
+  .shop-card.ozon:hover { border-color: #005bff; }
+  .shop-card.yandex { border-left: 4px solid #fc3f1d; }
+  .shop-card.yandex:hover { border-color: #fc3f1d; }
+
+  .shop-card::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.2;
+    transition: opacity 0.4s;
+  }
+  .shop-card.ozon::before { background: #005bff; }
+  .shop-card.yandex::before { background: #fc3f1d; }
+  .shop-card:hover::before { opacity: 0.35; }
+
+  .shop-logo {
+    font-family: var(--font-d);
+    font-size: 44px; font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
+  }
+  .shop-card.ozon .shop-logo { color: #4f8aff; }
+  .shop-card.yandex .shop-logo { color: #fc6b4d; }
+  .shop-tag {
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 2.5px;
+    color: var(--dim); text-transform: uppercase;
+    margin-bottom: 32px;
+    position: relative; z-index: 2;
+  }
+  .shop-tag::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: currentColor;
+    margin-right: 8px;
+    transform: translateY(-2px);
+  }
+  .shop-h {
+    font-family: var(--font-d);
+    font-size: 22px; font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    position: relative; z-index: 2;
+  }
+  .shop-p {
+    font-size: 14px; color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 32px;
+    position: relative; z-index: 2;
+  }
+  .shop-link {
+    font-family: var(--font-m);
+    font-size: 11px; letter-spacing: 2.5px;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 12px;
+    color: var(--text);
+    transition: gap 0.25s, color 0.25s;
+    position: relative; z-index: 2;
+  }
+  .shop-card:hover .shop-link { gap: 18px; }
+  .shop-card.ozon:hover .shop-link { color: #4f8aff; }
+  .shop-card.yandex:hover .shop-link { color: #fc6b4d; }
+
+  /* =========================================
+     CONTACT
+     ========================================= */
+  .contact {
+    position: relative;
+    padding: 160px 56px 96px;
+    text-align: center;
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+  }
+  .contact::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(255,214,64,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .contact-inner { position: relative; z-index: 4; }
+  .contact h2 {
+    font-family: var(--font-d);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin-bottom: 32px;
+  }
+  .contact h2 em { font-style: normal; color: var(--gold-hot); text-shadow: 0 0 32px rgba(255,214,64,0.4); }
+  .contact p {
+    font-size: 16px; color: var(--muted);
+    max-width: 540px; margin: 0 auto 56px;
+    line-height: 1.7;
+  }
+  .contact-mail {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-family: var(--font-d);
+    font-size: clamp(20px, 2.6vw, 32px);
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    padding: 22px 36px;
+    border: 1px solid var(--line-2);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-mail::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateY(101%);
+    transition: transform 0.4s cubic-bezier(0.7,0,0.3,1);
+    z-index: -1;
+  }
+  .contact-mail:hover { border-color: var(--gold); color: #000; }
+  .contact-mail:hover::before { transform: translateY(0); }
+  .contact-mail .dot { width: 10px; height: 10px; background: var(--gold-hot); border-radius: 50%; box-shadow: 0 0 12px var(--gold-hot); }
+  .contact-mail:hover .dot { background: #000; box-shadow: none; }
+
+  /* =========================================
+     FOOTER
+     ========================================= */
+  footer {
+    padding: 56px;
+    border-top: 1px solid var(--line);
+    background: var(--bg-1);
+  }
+  .footer-top {
+    max-width: 1320px; margin: 0 auto;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 40px; flex-wrap: wrap; padding-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-brand h3 {
+    font-family: var(--font-d);
+    font-size: 96px; font-weight: 800;
+    line-height: 0.9; letter-spacing: -0.05em;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .footer-brand h3 .gold { color: var(--gold-hot); }
+  .footer-brand p {
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 3px;
+    color: var(--gold-hot); text-transform: uppercase;
+  }
+  .footer-cols { display: flex; gap: 64px; flex-wrap: wrap; }
+  .footer-col h5 {
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 2.5px;
+    color: var(--dim); text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-col a, .footer-col li {
+    display: block;
+    font-size: 14px; color: var(--text);
+    text-decoration: none;
+    line-height: 2.1;
+    transition: color 0.2s;
+    list-style: none;
+  }
+  .footer-col a:hover { color: var(--gold-hot); }
+  .footer-bottom {
+    max-width: 1320px; margin: 32px auto 0;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    font-family: var(--font-m);
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--dim); text-transform: uppercase;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .logo-canvas, .phase-tag, .hud-corners { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 56px; }
+    .about-vis { max-width: 360px; }
+    .features { grid-template-columns: repeat(2, 1fr); }
+    .product-grid { grid-template-columns: 1fr; }
+    .shops-grid { grid-template-columns: 1fr; }
+    nav.main, nav.main.scrolled { padding-left: 32px; padding-right: 32px; }
+    .hero { padding-left: 32px; padding-right: 32px; }
+    .section { padding-left: 32px; padding-right: 32px; }
+    .shops-section { padding-left: 32px; padding-right: 32px; }
+    .hero-brackets > span:nth-child(1) { left: 32px; }
+    .hero-brackets > span:nth-child(2) { right: 32px; }
+    .hero-brackets > span:nth-child(3) { left: 32px; }
+    .hero-brackets > span:nth-child(4) { right: 32px; }
+  }
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    nav.main .nav-cta { padding: 9px 14px; font-size: 10px; letter-spacing: 1.5px; }
+    .nav-logo-sub { display: none; }
+    .marquee span { font-size: 22px; gap: 36px; }
+    .marquee-track { gap: 36px; }
+  }
+  @media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none; }
+    * { cursor: auto !important; }
+    a, button, .cta, .cta-ghost, .product-card, .contact-mail, .mp, .shop-card, .pshop { cursor: pointer !important; }
+    nav.main { padding: 12px 16px; }
+    nav.main.scrolled { padding: 10px 16px; }
+    .nav-logo img { height: 26px; }
+    .nav-logo-name { font-size: 14px; letter-spacing: 1.5px; }
+    .hero { padding: 96px 20px 40px; min-height: auto; }
+    .hero-brackets, .hero-goldbar, .hero-meta { display: none; }
+    .hero-label { font-size: 10px; letter-spacing: 2.5px; margin-bottom: 24px; }
+    .hero-label::before { width: 24px; }
+    .hero-h1 { font-size: clamp(40px, 12vw, 72px); line-height: 0.98; letter-spacing: -0.03em; }
+    .hero-desc { font-size: 14px; margin-bottom: 36px; }
+    .hero-row { gap: 12px; margin-bottom: 36px; }
+    .cta { padding: 18px 24px; font-size: 12px; letter-spacing: 2px; }
+    .cta-ghost { padding: 18px 22px; font-size: 10px; }
+    .marketplaces { gap: 10px; }
+    .mp { padding: 12px 16px; font-size: 11px; }
+    .marquee { padding: 16px 0; }
+    .marquee span { font-size: 18px; gap: 28px; }
+    .marquee-track { gap: 28px; }
+    .section { padding: 80px 20px; }
+    .section-title { font-size: clamp(32px, 9vw, 56px); margin-bottom: 40px; }
+    .products-head { flex-direction: column; gap: 24px; margin-bottom: 40px; }
+    .products-head-side { max-width: 100%; }
+    .product-card { grid-template-columns: 1fr; padding: 24px; gap: 18px; }
+    .product-img-wrap { height: 220px; }
+    .product-name { font-size: 22px; }
+    .product-sub { font-size: 13px; margin-bottom: 18px; }
+    .product-tags { margin-bottom: 18px; }
+    .product-shops { padding-top: 14px; }
+    .pshop { padding: 12px 10px; font-size: 11px; }
+    .about-grid { gap: 40px; }
+    .about-quote { font-size: 18px; padding-left: 18px; margin-top: 28px; }
+    .countries { grid-template-columns: 1fr; gap: 16px; }
+    .country { padding: 20px; }
+    .country-name { font-size: 20px; }
+    .features { grid-template-columns: 1fr; margin-top: 56px; }
+    .shops-section { padding: 80px 20px; }
+    .shop-card { padding: 40px 28px; }
+    .shop-logo { font-size: 36px; }
+    .shop-h { font-size: 18px; }
+    .contact { padding: 96px 20px 56px; }
+    .contact h2 { font-size: clamp(36px, 11vw, 64px); margin-bottom: 24px; }
+    .contact p { font-size: 14px; margin-bottom: 40px; }
+    .contact-mail { font-size: 17px; padding: 18px 22px; gap: 12px; word-break: break-all; }
+    footer { padding: 40px 20px; }
+    .footer-top { padding-bottom: 32px; gap: 28px; }
+    .footer-brand h3 { font-size: 48px; }
+    .footer-cols { gap: 32px; }
+    .footer-bottom { gap: 12px; font-size: 9px; flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 420px) {
+    .hero-h1 { font-size: 36px; line-height: 1.05; }
+    .section-title { font-size: 32px; }
+    .product-name { font-size: 19px; }
+    .shop-logo { font-size: 30px; }
+    .footer-brand h3 { font-size: 40px; }
+    .countries { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- OVERLAYS -->
+<div class="grid-overlay"></div>
+<canvas id="particles"></canvas>
+<div class="scanlines"></div>
+<div class="noise"></div>
+<div class="vignette"></div>
+
+<!-- CURSOR -->
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-fill" id="topbarFill"></div>
+  <div class="topbar-tick" id="topbarTick">LIVE · 00:00</div>
+</div>
+
+<!-- NAV -->
+<nav class="main" id="nav">
+  <a href="#top" class="nav-logo" data-cursor="link">
+    <img src="assets/logo-white.png" alt="BUCKLER" />
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">BUCKLER</span>
+      <span class="nav-logo-sub">DIGITAL · MARKETPLACE</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-cursor="link">← На главную</a></li>
+    <li><a href="#products" data-cursor="link">Каталог</a></li>
+    <li><a href="#shops" data-cursor="link">Маркетплейсы</a></li>
+    <li><a href="#contact" data-cursor="link">Контакты</a></li>
+  </ul>
+  <a href="#shops" class="nav-cta" data-cursor="link">Купить онлайн →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-goldbar"></div>
+  <div class="hero-brackets"><span></span><span></span><span></span><span></span></div>
+  <div class="hero-meta">
+    <span class="dot"></span>
+    <span>BY · RU · MARKETPLACE EDITION</span>
+    <span class="dot"></span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-label">Линейка для маркетплейсов · OZON · Я.Маркет</div>
+
+      <h1 class="hero-h1">
+        <span class="word d1"><span>Сделано в</span></span>
+        <br/>
+        <span class="word d2"><span class="gold">Беларуси.</span></span>
+        <br/>
+        <span class="word d3"><span>Создано для</span></span>
+        <br/>
+        <span class="word d4"><span class="blue">России.</span></span>
+      </h1>
+
+      <p class="hero-desc">Buckler Digital — линейка лакокрасочных материалов для&nbsp;кузовного ремонта, разработанная специально для&nbsp;<strong>продаж на&nbsp;маркетплейсах:</strong> OZON и&nbsp;Яндекс Маркет.</p>
+
+      <div class="hero-row">
+        <a href="#products" class="cta" data-cursor="cta">
+          <span>Смотреть товары</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="#about" class="cta-ghost" data-cursor="link">
+          <span>О линейке</span>
+          <span>↓</span>
+        </a>
+      </div>
+
+      <div class="marketplaces">
+        <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j" target="_blank" rel="noopener" class="mp ozon" data-cursor="link">
+          <span class="mp-dot"></span>
+          <span><div class="mp-sub">Купить на</div><div class="mp-name">OZON</div></span>
+        </a>
+        <a href="https://market.yandex.ru/" target="_blank" rel="noopener" class="mp yandex" data-cursor="link">
+          <span class="mp-dot"></span>
+          <span><div class="mp-sub">Купить на</div><div class="mp-name">Я.Маркет</div></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="orb-wrap">
+        <canvas id="logoParticles" class="logo-canvas"></canvas>
+        <div class="hud-corners"><span></span><span></span><span></span><span></span></div>
+        <span class="orb-chip orb-chip-1">DIGITAL</span>
+        <span class="orb-chip orb-chip-3">Я.МАРКЕТ</span>
+        <span class="orb-chip orb-chip-4">BUCKLER ✦</span>
+
+        <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j"
+           target="_blank" rel="noopener" class="orb-ozon" data-cursor="cta">
+          <span class="orb-ozon-dot"></span>
+          <span>
+            <span class="orb-ozon-label">Купить на</span>
+            <span class="orb-ozon-name">OZON</span>
+          </span>
+          <span class="orb-ozon-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>OZON</span><span>Я.МАРКЕТ</span><span>BRUSH SEALANT</span><span>SPRAYED SEALANT</span><span>MARKETPLACE EDITION</span><span>MADE IN BELARUS</span><span>FOR RUSSIA</span>
+    <span>OZON</span><span>Я.МАРКЕТ</span><span>BRUSH SEALANT</span><span>SPRAYED SEALANT</span><span>MARKETPLACE EDITION</span><span>MADE IN BELARUS</span><span>FOR RUSSIA</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="products-head reveal">
+    <div>
+      <div class="section-num">01 · Каталог Digital</div>
+      <h2 class="section-title clip-reveal"><span>Доступно<br/>на <em>маркетплейсах.</em></span></h2>
+    </div>
+    <div class="products-head-side">
+      <p>Материалы для&nbsp;кузовного ремонта — прямо на&nbsp;OZON и&nbsp;Яндекс Маркет. Быстро, удобно, с&nbsp;доставкой. Всё для&nbsp;кузовного ремонта в&nbsp;пару кликов. Доставка по&nbsp;всей России.</p>
+      <div class="meta">2 позиции · В&nbsp;продаже · Доставка по&nbsp;РФ</div>
+    </div>
+  </div>
+
+  <div class="product-grid reveal-stagger">
+    <article class="product-card" style="--i:0" data-cursor="link">
+      <div class="product-img-wrap"><img src="assets/digital_brush.png" alt="Герметик кистевой" /></div>
+      <div class="product-body">
+        <div class="product-badge">В продаже</div>
+        <div class="product-sku">BCK-D · BRUSH SEALANT · 1 КГ</div>
+        <h3 class="product-name">Герметик шовный кистевой</h3>
+        <p class="product-sub">Для герметизации сварных швов. Заводская имитация шва. Окрашивается через 30 минут.</p>
+        <div class="product-tags">
+          <span class="ptag gold">1 КГ</span>
+          <span class="ptag">КИСТЕВОЙ</span>
+          <span class="ptag">MS-ПОЛИМЕР</span>
+        </div>
+        <div class="product-shops">
+          <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j" target="_blank" rel="noopener" class="pshop ozon" data-cursor="link">
+            <span class="pshop-dot"></span><span>OZON</span>
+          </a>
+          <a href="https://market.yandex.ru/" target="_blank" rel="noopener" class="pshop yandex" data-cursor="link">
+            <span class="pshop-dot"></span><span>Я.МАРКЕТ</span>
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <article class="product-card" style="--i:1" data-cursor="link">
+      <div class="product-img-wrap"><img src="assets/digital_sprayed.png" alt="Герметик напыляемый" /></div>
+      <div class="product-body">
+        <div class="product-badge">В продаже</div>
+        <div class="product-sku">BCK-D · SPRAYED SEALANT · 1 КГ</div>
+        <h3 class="product-name">Герметик напыляемый каучуковый</h3>
+        <p class="product-sub">Защита днища, арок и&nbsp;порогов. Антишум, антикор. Серый и&nbsp;чёрный.</p>
+        <div class="product-tags">
+          <span class="ptag gold">1 КГ</span>
+          <span class="ptag">EUROBALLON</span>
+          <span class="ptag">ANTI-NOISE</span>
+        </div>
+        <div class="product-shops">
+          <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j" target="_blank" rel="noopener" class="pshop ozon" data-cursor="link">
+            <span class="pshop-dot"></span><span>OZON</span>
+          </a>
+          <a href="https://market.yandex.ru/" target="_blank" rel="noopener" class="pshop yandex" data-cursor="link">
+            <span class="pshop-dot"></span><span>Я.МАРКЕТ</span>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-num">02 · О линейке</div>
+      <h2 class="section-title clip-reveal" style="margin-bottom:40px;">
+        <span>Для тех, кто<br/><em>делает сам.</em></span>
+      </h2>
+      <p>Buckler Digital — линейка лакокрасочных материалов для&nbsp;кузовного ремонта, доступная на&nbsp;маркетплейсах. <strong>Заводское качество,</strong> аккредитованная лаборатория, европейское сырьё.</p>
+      <p>Удобная фасовка, штрих-коды, документы и&nbsp;технические консультации до&nbsp;и&nbsp;после покупки. Для&nbsp;гаражных и&nbsp;одиночных ремонтов — там, где не&nbsp;нужны пятилитровые канистры.</p>
+      <div class="about-quote">
+        «Разработано для тех, кто <em>делает сам.</em> Профессиональный результат без&nbsp;лишних вопросов.»
+      </div>
+
+      <div class="countries">
+        <div class="country by">
+          <div class="country-flag"><span></span><span></span></div>
+          <div>
+            <div class="country-label">Производство</div>
+            <div class="country-name">Беларусь</div>
+            <div class="country-sub">Солигорск · Завод КМТ</div>
+          </div>
+        </div>
+        <div class="country ru">
+          <div class="country-flag"><span></span><span></span><span></span></div>
+          <div>
+            <div class="country-label">Рынок</div>
+            <div class="country-name">Россия</div>
+            <div class="country-sub">OZON · Я.Маркет · Доставка по&nbsp;РФ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-vis reveal" data-parallax="0.12">
+      <div class="about-ring r3"></div>
+      <div class="about-ring r2"></div>
+      <div class="about-ring r1"></div>
+      <div class="about-shield">
+        <img src="assets/logo-white.png" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE GRID -->
+  <div class="features reveal-stagger">
+    <div class="feature" style="--i:0">
+      <div class="feature-num">01</div>
+      <div class="feature-h">Прямо от производителя</div>
+      <p>Покупайте напрямую у&nbsp;завода — без посредников и&nbsp;наценок дистрибьюторов.</p>
+    </div>
+    <div class="feature" style="--i:1">
+      <div class="feature-num">02</div>
+      <div class="feature-h">Удобная фасовка</div>
+      <p>Под потребности гаражных и&nbsp;одиночных ремонтов.</p>
+    </div>
+    <div class="feature" style="--i:2">
+      <div class="feature-num">03</div>
+      <div class="feature-h">Поддержка покупателей</div>
+      <p>Технические консультации до&nbsp;и&nbsp;после покупки.</p>
+    </div>
+    <div class="feature" style="--i:3">
+      <div class="feature-num">04</div>
+      <div class="feature-h">Стабильное качество</div>
+      <p>Европейское сырьё. Контроль качества на&nbsp;каждом этапе производства.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETPLACES SECTION -->
+<section class="shops-section" id="shops">
+  <div style="max-width:1320px; margin:0 auto;">
+    <div class="section-num">03 · Маркетплейсы</div>
+    <h2 class="section-title reveal clip-reveal"><span>Найдите нас<br/>в <em>одном клике.</em></span></h2>
+  </div>
+
+  <div class="shops-grid reveal-stagger">
+    <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j" target="_blank" rel="noopener" class="shop-card ozon" style="--i:0" data-cursor="link">
+      <div class="shop-logo">OZON</div>
+      <div class="shop-tag">Маркетплейс №1</div>
+      <div class="shop-h">Buckler Digital на OZON</div>
+      <p class="shop-p">Все позиции цифровой линейки. Быстрая доставка по&nbsp;России, отзывы и&nbsp;рейтинги, гарантия маркетплейса.</p>
+      <span class="shop-link">
+        <span>Перейти в магазин</span>
+        <span>→</span>
+      </span>
+    </a>
+    <a href="https://market.yandex.ru/" target="_blank" rel="noopener" class="shop-card yandex" style="--i:1" data-cursor="link">
+      <div class="shop-logo">Я.Маркет</div>
+      <div class="shop-tag">Яндекс Маркет</div>
+      <div class="shop-h">Buckler Digital на Я.Маркете</div>
+      <p class="shop-p">Доступно на&nbsp;Яндекс Маркете. Удобная доставка, поддержка, плюс за&nbsp;Яндекс Плюс.</p>
+      <span class="shop-link">
+        <span>Перейти в магазин</span>
+        <span>→</span>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="contact-inner">
+    <div class="section-num" style="justify-content:center; display: inline-flex;">04 · Контакты</div>
+    <h2 class="reveal clip-reveal"><span>Сотрудничество<br/>и <em>дистрибуция.</em></span></h2>
+    <p class="reveal">Открыты к&nbsp;сотрудничеству с&nbsp;маркетплейс-байерами, дистрибьюторами и&nbsp;партнёрскими магазинами в&nbsp;РФ и&nbsp;СНГ. Свяжитесь с&nbsp;нами по&nbsp;вопросам поставок.</p>
+    <a href="mailto:compositecoat@gmail.com" class="contact-mail reveal" data-cursor="cta">
+      <span class="dot"></span>
+      <span>compositecoat@gmail.com</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3>BUCKLER<br/><span class="gold">DIGITAL</span></h3>
+      <p>MARKETPLACE EDITION · MADE IN BELARUS · FOR RUSSIA</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h5>Каталог</h5>
+        <a href="#products" data-cursor="link">Герметик кистевой</a>
+        <a href="#products" data-cursor="link">Герметик напыляемый</a>
+      </div>
+      <div class="footer-col">
+        <h5>Маркетплейсы</h5>
+        <a href="https://ozon.by/product/germetik-shovnyy-kistevoy-buckler-1kg-seryy-3595685020/?at=qQtJxQEpQcxVv1JTxVVOVXfLQ207JIx35ZPYs34pz3j" target="_blank" rel="noopener" data-cursor="link">OZON</a>
+        <a href="https://market.yandex.ru/" target="_blank" rel="noopener" data-cursor="link">Я.Маркет</a>
+      </div>
+      <div class="footer-col">
+        <h5>Buckler</h5>
+        <a href="index.html" data-cursor="link">На главную</a>
+        <a href="mailto:compositecoat@gmail.com" data-cursor="link">compositecoat@gmail.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ООО «Композиционные материалы и технологии»</span>
+    <span>BUCKLER DIGITAL · Для всех.</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  // TOP PROGRESS
+  const fill = document.getElementById('topbarFill');
+  const tick = document.getElementById('topbarTick');
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? window.scrollY / max : 0;
+    fill.style.width = (p * 100) + '%';
+    const total = 180;
+    const t = Math.floor(p * total);
+    const mm = String(Math.floor(t/60)).padStart(2,'0');
+    const ss = String(t%60).padStart(2,'0');
+    tick.textContent = `LIVE · ${mm}:${ss}`;
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // CUSTOM CURSOR
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mx = innerWidth/2, my = innerHeight/2;
+  let rx = mx, ry = my;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+  });
+  const raf = () => {
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(raf);
+  };
+  raf();
+  document.querySelectorAll('[data-cursor]').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+
+  // PARTICLES (gold motes)
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const resize = () => {
+    canvas.width = innerWidth * devicePixelRatio;
+    canvas.height = innerHeight * devicePixelRatio;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    const n = Math.floor(innerWidth * innerHeight / 22000);
+    particles = Array.from({length:n}, () => ({
+      x: Math.random()*innerWidth,
+      y: Math.random()*innerHeight,
+      vx: (Math.random()-0.5)*0.15,
+      vy: -0.05 - Math.random()*0.18,
+      r: Math.random()*1.4 + 0.3,
+      a: Math.random()*0.5 + 0.1,
+      gold: Math.random() < 0.25
+    }));
+  };
+  resize();
+  window.addEventListener('resize', resize);
+  const draw = () => {
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -10) { p.y = innerHeight + 10; p.x = Math.random()*innerWidth; }
+      if (p.x < -10) p.x = innerWidth + 10;
+      if (p.x > innerWidth + 10) p.x = -10;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      if (p.gold) {
+        ctx.fillStyle = `rgba(255, 214, 64, ${p.a})`;
+        ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(255,214,64,0.6)';
+      } else {
+        ctx.fillStyle = `rgba(255,255,255,${p.a*0.5})`;
+        ctx.shadowBlur = 0;
+      }
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(draw);
+  };
+  draw();
+
+  // REVEALS
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.reveal, .reveal-stagger, .clip-reveal').forEach(el => io.observe(el));
+
+  // PRODUCT CARDS — cursor-follow glow
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+
+  // PARALLAX
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+  const parallax = () => {
+    parallaxEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      const speed = +el.dataset.parallax || 0.1;
+      const offset = (r.top - innerHeight/2) * -speed;
+      el.style.transform = `translate3d(0, ${offset}px, 0)`;
+    });
+    requestAnimationFrame(parallax);
+  };
+  parallax();
+
+  // HERO mouse parallax
+  const heroLeft = document.querySelector('.hero-left');
+  const heroRight = document.querySelector('.hero-right');
+  document.querySelector('.hero').addEventListener('mousemove', e => {
+    const x = (e.clientX/innerWidth - 0.5) * 10;
+    const y = (e.clientY/innerHeight - 0.5) * 6;
+    if (heroLeft)  heroLeft.style.transform  = `translate3d(${x*-0.4}px, ${y*-0.4}px, 0)`;
+    if (heroRight) heroRight.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  });
+
+  // ===========================
+  // FREEFORM PARTICLE FIELD (no logo, drifts in central 60%)
+  // ===========================
+  (function setupParticles() {
+    const canvas = document.getElementById('logoParticles');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const wrap = canvas.parentElement;
+
+    let W = 0, H = 0, DPR = 1;
+    let particles = [];
+    let mx = 0, my = 0;
+    let boundary = 0;   // soft radius (60% of min dim / 2)
+    let cx = 0, cy = 0;
+
+    const resize = () => {
+      DPR = Math.min(2, window.devicePixelRatio || 1);
+      const r = wrap.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(DPR, DPR);
+
+      cx = W / 2; cy = H / 2;
+      // 60% of the smaller dimension as the soft circular field
+      boundary = Math.min(W, H) * 0.5;  // diameter 60% → radius = 0.3 * minDim ; but make it visually richer
+      // particle cloud occupies ~110% diameter of min dim (boundary radius = 0.55 of minDim)
+      // — twice as large as before
+      boundary = Math.min(W, H) * 0.55;
+
+      seed();
+    };
+
+    function seed() {
+      // density scales with area
+      const N = Math.max(700, Math.min(1600, Math.floor(W * H / 220)));
+      particles.length = 0;
+      for (let i = 0; i < N; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        // bias toward outer half — feels alive
+        const r = Math.sqrt(Math.random()) * boundary * (0.85 + Math.random() * 0.25);
+        particles.push({
+          x: cx + Math.cos(ang) * r,
+          y: cy + Math.sin(ang) * r,
+          // orbital velocity (tangent) + tiny radial
+          ang,
+          r,
+          omega: (Math.random() * 0.0006 + 0.0003) * (Math.random() < 0.5 ? 1 : -1),
+          rDrift: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 1.3 + 0.55,
+          tone: Math.random(),
+          twk: Math.random() * Math.PI * 2,
+          twkSpeed: 0.003 + Math.random() * 0.004,
+          // cursor-displacement state
+          dx: 0, dy: 0
+        });
+      }
+    }
+
+    function tick(now) {
+      ctx.clearRect(0, 0, W, H);
+
+      // subtle inner glow centred on field
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, boundary * 1.5);
+      g.addColorStop(0,   'rgba(255, 214, 64, 0.12)');
+      g.addColorStop(0.5, 'rgba(255, 170, 32, 0.04)');
+      g.addColorStop(1,   'rgba(255, 214, 64, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.globalCompositeOperation = 'lighter';
+
+      for (const p of particles) {
+        // orbital motion
+        p.ang += p.omega * (1000 / 60);
+        // slow radial breathing
+        p.r += p.rDrift;
+        // soft elastic boundary — pull back if drifting out
+        if (p.r > boundary) {
+          p.rDrift -= 0.02;
+          p.r = boundary + (p.r - boundary) * 0.9;
+        } else if (p.r < boundary * 0.15) {
+          p.rDrift += 0.02;
+        }
+        // light damping on radial drift
+        p.rDrift *= 0.985;
+        if (Math.random() < 0.005) p.rDrift += (Math.random() - 0.5) * 0.5;
+
+        // base position from orbital model
+        let bx = cx + Math.cos(p.ang) * p.r;
+        let by = cy + Math.sin(p.ang) * p.r;
+
+        // cursor repulsion adds local displacement
+        if (mx) {
+          const rx = bx - mx, ry = by - my;
+          const d2 = rx * rx + ry * ry;
+          if (d2 < 8000) {
+            const d = Math.sqrt(d2) || 1;
+            const f = (8000 - d2) / 8000;
+            p.dx += (rx / d) * f * 1.2;
+            p.dy += (ry / d) * f * 1.2;
+          }
+        }
+        // displacement spring back to zero
+        p.dx *= 0.92;
+        p.dy *= 0.92;
+
+        const x = bx + p.dx;
+        const y = by + p.dy;
+
+        // shimmer
+        p.twk += p.twkSpeed;
+        const tw = 0.55 + 0.45 * Math.sin(p.twk);
+        const alpha = 0.7 + 0.3 * tw;
+
+        // gold palette (4 tones)
+        let r, gC, b;
+        if (p.tone < 0.10)      { r = 255; gC = 250; b = 220; }
+        else if (p.tone < 0.60) { r = 255; gC = 210; b = 70;  }
+        else if (p.tone < 0.90) { r = 255; gC = 168; b = 32;  }
+        else                    { r = 220; gC = 90;  b = 10;  }
+
+        ctx.fillStyle = `rgba(${r}, ${gC}, ${b}, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // sparse halo on shimmer peaks
+        if (tw > 0.88 && Math.random() < 0.018) {
+          ctx.fillStyle = `rgba(${r}, ${gC}, ${b}, ${alpha * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(x, y, p.size * 3.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      ctx.globalCompositeOperation = 'source-over';
+      requestAnimationFrame(tick);
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const r = canvas.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+    });
+    canvas.addEventListener('mouseleave', () => { mx = 0; my = 0; });
+
+    resize();
+    window.addEventListener('resize', resize);
+    requestAnimationFrame(tick);
+  })();
+})();
+</script>
+</body>
+</html>
