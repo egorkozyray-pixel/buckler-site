@@ -524,7 +524,7 @@ body > * { width: 100%; box-sizing: border-box; }
     <ul class="footer-links">
       <li><a href="buckler.html">Buckler Professional</a></li>
       <li><a href="index.html">Главная</a></li>
-      <li><a href="mailto:info@buckler.by">Контакты</a></li>
+      <li><a href="mailto:info@buckler.by" data-show-email>Контакты</a></li>
     </ul>
   </div>
 </footer>
@@ -532,6 +532,31 @@ body > * { width: 100%; box-sizing: border-box; }
   <span class="footer-copy">© 2025 Buckler Digital · ООО «Композиционные материалы и технологии» · Солигорск, Беларусь</span>
   <div class="footer-live"><div class="footer-live-dot"></div>ONLINE</div>
 </div>
+
+
+<script>
+(function() {
+  const EMAIL = 'compositecoat@gmail.com';
+  function showEmail(el) {
+    const original = el.dataset.original || el.textContent.trim();
+    el.dataset.original = original;
+    el.textContent = EMAIL;
+    el.style.letterSpacing = '0';
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => {
+      el.textContent = original;
+      el.style.letterSpacing = '';
+    }, 3000);
+  }
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('.nav-contact, .contact-btn, .btn-gold-lg, [data-show-email]');
+    if (el) {
+      e.preventDefault();
+      showEmail(el);
+    }
+  });
+})();
+</script>
 
 </body>
 </html>

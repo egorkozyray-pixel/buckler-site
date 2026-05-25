@@ -407,7 +407,7 @@
   <ul class="nav-links">
     <li><a href="#catalog">Каталог</a></li>
     <li><a href="#about">О компании</a></li>
-    <li><a href="#contact">Контакты</a></li>
+    <li><a href="#contact" data-show-email>Контакты</a></li>
   </ul>
   <a href="mailto:info@buckler.by" class="nav-contact">Связаться</a>
 </nav>
@@ -747,6 +747,31 @@
       }
     });
   }
+</script>
+
+
+<script>
+(function() {
+  const EMAIL = 'compositecoat@gmail.com';
+  function showEmail(el) {
+    const original = el.dataset.original || el.textContent.trim();
+    el.dataset.original = original;
+    el.textContent = EMAIL;
+    el.style.letterSpacing = '0';
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => {
+      el.textContent = original;
+      el.style.letterSpacing = '';
+    }, 3000);
+  }
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('.nav-contact, .contact-btn, .btn-gold-lg, [data-show-email]');
+    if (el) {
+      e.preventDefault();
+      showEmail(el);
+    }
+  });
+})();
 </script>
 
 </body>
