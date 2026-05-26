@@ -1222,6 +1222,82 @@
     color: var(--dim); text-transform: uppercase;
   }
 
+  /* MOBILE NAV BURGER */
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 40px; height: 40px;
+    padding: 8px;
+    background: none;
+    border: 1px solid var(--line-2);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 101;
+  }
+  .nav-burger:hover { border-color: var(--gold-hot); }
+  .nav-burger span {
+    display: block;
+    width: 100%; height: 1px;
+    background: var(--text);
+    transition: transform 0.35s cubic-bezier(0.7,0,0.3,1), opacity 0.2s;
+    transform-origin: center;
+  }
+  .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; }
+  .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE NAV DRAWER */
+  .nav-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(7,6,10,0.97);
+    backdrop-filter: blur(24px) saturate(140%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .nav-drawer.open { opacity: 1; pointer-events: auto; }
+  .nav-drawer a {
+    font-family: var(--font-d);
+    font-size: clamp(28px, 9vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: rgba(243,243,240,0.35);
+    text-decoration: none;
+    padding: 8px 0;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-drawer a:hover { color: var(--text); }
+  .nav-drawer .drawer-divider {
+    width: 40px; height: 1px;
+    background: var(--line-2);
+    margin: 12px 0;
+  }
+  .nav-drawer .drawer-cta {
+    margin-top: 20px;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 28px;
+    background: var(--gold);
+    color: #000;
+    font-family: var(--font-d);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-drawer .drawer-cta:hover { background: var(--gold-hot); color: #000; }
+
   /* RESPONSIVE */
   @media (max-width: 1100px) {
     .hero-inner { grid-template-columns: 1fr; }
@@ -1247,6 +1323,7 @@
     .nav-logo-sub { display: none; }
     .marquee span { font-size: 22px; gap: 36px; }
     .marquee-track { gap: 36px; }
+    .nav-burger { display: flex; }
   }
   @media (max-width: 768px) {
     body { cursor: auto; }
@@ -1295,7 +1372,9 @@
     .contact { padding: 96px 20px 56px; }
     .contact h2 { font-size: clamp(36px, 11vw, 64px); margin-bottom: 24px; }
     .contact p { font-size: 14px; margin-bottom: 40px; }
-    .contact-mail { font-size: 17px; padding: 18px 22px; gap: 12px; word-break: break-all; }
+    .contact-mail { font-size: 17px; padding: 18px 22px; gap: 12px; word-break: break-all; max-width: 100%; box-sizing: border-box; }
+    .topbar-tick { display: none; }
+    nav.main .nav-cta { display: none; }
     footer { padding: 40px 20px; }
     .footer-top { padding-bottom: 32px; gap: 28px; }
     .footer-brand h3 { font-size: 48px; }
@@ -1347,7 +1426,20 @@
     <li><a href="#contact" data-cursor="link">Контакты</a></li>
   </ul>
   <a href="#shops" class="nav-cta" data-cursor="link">Купить онлайн →</a>
+  <button class="nav-burger" id="navBurger" aria-label="Открыть меню" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="nav-drawer" id="navDrawer" aria-hidden="true">
+  <a href="index.html">← На главную</a>
+  <div class="drawer-divider"></div>
+  <a href="#products">Каталог</a>
+  <a href="#about">О линейке</a>
+  <a href="#shops">Маркетплейсы</a>
+  <a href="#contact">Контакты</a>
+  <a href="#shops" class="drawer-cta">Купить онлайн →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="top">
@@ -1677,6 +1769,22 @@
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
   });
 
+  // MOBILE BURGER
+  const burger = document.getElementById('navBurger');
+  const drawer = document.getElementById('navDrawer');
+  if (burger && drawer) {
+    const toggleDrawer = (open) => {
+      burger.classList.toggle('open', open);
+      drawer.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      drawer.setAttribute('aria-hidden', String(!open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    burger.addEventListener('click', () => toggleDrawer(!burger.classList.contains('open')));
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleDrawer(false); });
+  }
+
   // PARTICLES (gold motes)
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
@@ -1744,18 +1852,20 @@
     });
   });
 
-  // PARALLAX
+  // PARALLAX (desktop only)
   const parallaxEls = document.querySelectorAll('[data-parallax]');
-  const parallax = () => {
-    parallaxEls.forEach(el => {
-      const r = el.getBoundingClientRect();
-      const speed = +el.dataset.parallax || 0.1;
-      const offset = (r.top - innerHeight/2) * -speed;
-      el.style.transform = `translate3d(0, ${offset}px, 0)`;
-    });
-    requestAnimationFrame(parallax);
-  };
-  parallax();
+  if (!window.matchMedia('(pointer: coarse)').matches) {
+    const parallax = () => {
+      parallaxEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        const speed = +el.dataset.parallax || 0.1;
+        const offset = (r.top - innerHeight/2) * -speed;
+        el.style.transform = `translate3d(0, ${offset}px, 0)`;
+      });
+      requestAnimationFrame(parallax);
+    };
+    parallax();
+  }
 
   // HERO mouse parallax
   const heroLeft = document.querySelector('.hero-left');
