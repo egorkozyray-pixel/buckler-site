@@ -1,6 +1,6 @@
 # Buckler Site — Deploy Package
 
-Static HTML site. No build step. Drop into any static host (Netlify / Vercel / GitHub Pages / Nginx / S3+CloudFront / Cloudflare Pages).
+Static HTML site. No build step. Drop into any static host (Netlify / Vercel / GitHub Pages / Nginx / S3+CloudFront / Cloudflare Pages). 
 
 ## Structure
 
