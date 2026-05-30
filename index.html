@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta name="theme-color" content="#0c0c0e" />
 <title>BUCKLER — Профессиональные материалы для кузовного ремонта</title>
 <meta name="description" content="Buckler — белорусский производитель лакокрасочных материалов для кузовного ремонта. Профессиональная линейка и Digital для маркетплейсов." />
  <link rel="canonical" href="https://buckler.by/" />
@@ -351,7 +352,7 @@
     transition: opacity 0.25s, transform 0.25s;
   }
   .pro .hint { right: 56px; color: var(--red-hot); }
-  .digital .hint { left: 56px; color: var(--gold-bright); }
+  .digital .hint { left: 56px; top: 28%; color: var(--gold-bright); }
   .panel:hover .hint { opacity: 0; }
 
   /* PRODUCT GLIMPSE (rotating images in background) */
@@ -360,19 +361,20 @@
     z-index: 2;
     pointer-events: none;
     opacity: 0;
+    mix-blend-mode: screen;
     transition: opacity 0.6s, transform 0.6s;
-    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.7));
+    filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
   }
-  .panel:hover .glimpse { opacity: 0.4; transform: translateY(-12px); }
+  .panel:hover .glimpse { opacity: 0.62; transform: translateY(-12px); }
   .pro .glimpse {
-    top: 50%; right: -60px;
+    top: 26%; right: 14%;
     transform: translateY(-50%);
-    width: 320px;
+    width: 250px;
   }
   .digital .glimpse {
-    top: 50%; left: -60px;
+    top: 25%; left: 5%; right: auto;
     transform: translateY(-50%);
-    width: 320px;
+    width: 210px;
   }
   .panel:hover .glimpse.pro-g { transform: translateY(calc(-50% - 12px)); }
   .panel:hover .glimpse.dig-g { transform: translateY(calc(-50% - 12px)); }
@@ -486,6 +488,16 @@
     .float-info.tr { display: none; }
     .float-info.br { display: none; }
   }
+  @media (max-width: 380px) {
+    .panel { padding: 80px 16px 60px; min-height: 50vh; }
+    .panel-tag { top: 16px; left: 16px; gap: 8px; }
+    .panel-tag-logo { width: 22px; height: 22px; }
+    .panel-tag-name { font-size: 12px; letter-spacing: 1px; }
+    .panel-title { font-size: 38px; line-height: 0.98; margin-bottom: 14px; }
+    .panel-desc { font-size: 12px; margin-bottom: 20px; }
+    .panel-cta { padding: 11px 14px; font-size: 9px; letter-spacing: 1px; }
+    .float-info.tl, .float-info.bl { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -508,8 +520,6 @@
     <div class="ring"></div>
     <div class="brackets"><span></span><span></span><span></span><span></span></div>
 
-    <img src="assets/hs207.png" class="glimpse pro-g" alt="" />
-
     <div class="panel-tag">
       <div class="panel-tag-logo"><img src="assets/logo-white.png" alt="" /></div>
       <div class="panel-tag-text">
@@ -517,8 +527,6 @@
         <span class="panel-tag-sub">PROFESSIONAL · BY</span>
       </div>
     </div>
-
-    <span class="hint">PROFESSIONAL →</span>
 
     <div class="panel-content">
       <div class="panel-eyebrow">Профессиональная линейка</div>
@@ -537,8 +545,6 @@
     <div class="ring"></div>
     <div class="brackets"><span></span><span></span><span></span><span></span></div>
 
-    <img src="assets/digital_sprayed.png" class="glimpse dig-g" alt="" />
-
     <div class="panel-tag">
       <div class="panel-tag-logo"><img src="assets/logo-white.png" alt="" /></div>
       <div class="panel-tag-text">
@@ -547,11 +553,9 @@
       </div>
     </div>
 
-    <span class="hint">DIGITAL →</span>
-
     <div class="panel-content">
       <div class="panel-eyebrow">Линейка для маркетплейсов</div>
-      <h2 class="panel-title">Для<br/><em>всех.</em></h2>
+      <h2 class="panel-title">Для<br/><em>мастера.</em></h2>
       <p class="panel-desc">Лакокрасочные материалы для кузовного ремонта на <strong>OZON и Яндекс Маркет.</strong> Сделано в Беларуси. Создано для России.</p>
       <div class="panel-cta">
         <span>Смотреть товары</span>
@@ -574,7 +578,7 @@
 <div class="float-info tl"><span class="dot"></span>Online · 2 линейки</div>
 <div class="float-info tr">SOLIGORSK · 53.79°N 27.54°E</div>
 <div class="float-info bl">© 2026 ООО «КМТ»</div>
-<div class="float-info br">BUCKLER · Для профи · Для всех</div>
+<div class="float-info br">BUCKLER · Для профи · Для мастера</div>
 
 <script>
 (() => {
